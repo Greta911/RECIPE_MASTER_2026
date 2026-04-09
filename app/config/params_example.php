@@ -1,4 +1,5 @@
 <?php
+$title = "";
 $content = "";
 
 define("DB_HOST", "your host");
