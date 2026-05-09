@@ -3,9 +3,11 @@
 
 namespace App\Controllers\PagesController;
 
+
 use \PDO;
 use \App\Models\RecipesModel;
 use \App\Models\UsersModel;
+
 
 function homeAction(PDO $conn)
 {
@@ -15,7 +17,6 @@ function homeAction(PDO $conn)
     $popularRecipes = RecipesModel\findAllPopulars($conn);
     $randomUser = UsersModel\findOneByRand($conn);
     $userLatestRecipes = RecipesModel\findAllByUserId($conn, $randomUser['id']);
-
 
     global $title, $content;
     $title = "Home";
