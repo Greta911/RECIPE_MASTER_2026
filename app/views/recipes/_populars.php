@@ -25,7 +25,7 @@
                         <span class="text-gray-500"><i class="fas fa-comment"></i> 8 commentaires</span>
                     </div>
                     <a
-                        href="recipe.html"
+                        href="?recipes=show&id=<?php echo $recipe['id']; ?>"
                         class="inline-block mt-4 bg-red-500 hover:bg-red-800 rounded-full px-4 py-2 text-white">
                         Voir la recette
                     </a>
