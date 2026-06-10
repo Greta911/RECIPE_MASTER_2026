@@ -47,3 +47,25 @@ function findAllByUserId(PDO $conn, int $userID): array
     $rs->execute();
     return $rs->fetchAll(PDO::FETCH_ASSOC);
 }
+
+function findAllByUserIdWithoutLimit(PDO $conn, int $userID): array
+{
+    $sql = "SELECT *
+            FROM recipes r
+            WHERE user_id = :userID;";
+
+    $rs = $conn->prepare($sql);
+    $rs->bindValue(':userID', $userID, PDO::PARAM_INT);
+    $rs->execute();
+
+    return $rs->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function findAll(PDO $conn): array
+{
+    $sql = "SELECT *
+            FROM recipes
+            ORDER BY created_at ASC;";
+    $rs = $conn->query($sql);
+    return $rs->fetchAll(PDO::FETCH_ASSOC);
+}

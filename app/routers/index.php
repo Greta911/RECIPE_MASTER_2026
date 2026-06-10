@@ -1,6 +1,5 @@
 <?php
 
-use App\Controllers\RecipesController;
 
 include_once "../app/controllers/recipesController.php";
 //ROUTE PAR DEFAUT
@@ -9,8 +8,11 @@ include_once "../app/controllers/recipesController.php";
 //ACTION: show
 
 if (isset($_GET['recipes'])):
-    //ROUTE DETAILS D'UNE RECETTE 
+    //ROUTE RECETTES 
     include_once "../app/routers/recipes.php";
+//ROUTE USERS
+elseif (isset($_GET['users'])):
+    include_once "../app/routers/users.php";
 //ROUTE PAR DEFAUT
 //PATTERN: /
 //CTRL: PagesController (composite)
