@@ -9,7 +9,7 @@ switch ($_GET['recipes']):
         RecipesController\showAction($conn, $_GET['id']);
         break;
     case 'user':
-        // Une fonction à ajouter dans ton recipesController pour lister les recettes d'un utilisateur spécifique
+        // Une fonction à ajouter dans recipesController pour lister les recettes d'un utilisateur spécifique
         RecipesController\userRecipesAction($conn, (int)$_GET['id']);
         break;
     default:

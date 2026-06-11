@@ -4,10 +4,9 @@
 include_once "../app/controllers/recipesController.php";
 
 include_once "../app/controllers/categoriesController.php";
-//ROUTE PAR DEFAUT
-//PATTERN: /recipes=show&id=x
-//CTRL: recipesController
-//ACTION: show
+
+include_once "../app/controllers/ingredientsController.php";
+
 
 if (isset($_GET['recipes'])):
     //ROUTE RECETTES 
@@ -20,7 +19,11 @@ elseif (isset($_GET['users'])):
 // ACTION: showAction
 elseif (isset($_GET['typeID'])) :
     \App\Controllers\CategoriesController\showAction($conn, $_GET['typeID']);
-
+// PATTERN: /?ingredientID=x
+// CTRL: ingredientsController
+// ACTION: showAction
+elseif (isset($_GET['ingredientID'])) :
+    \App\Controllers\IngredientsController\showAction($conn, $_GET['ingredientID']);
 //ROUTE PAR DEFAUT
 //PATTERN: /
 //CTRL: PagesController (composite)
