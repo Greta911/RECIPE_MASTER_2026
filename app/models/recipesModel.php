@@ -61,6 +61,18 @@ function findAllByUserIdWithoutLimit(PDO $conn, int $userID): array
     return $rs->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function findAllByTypeId(PDO $conn, int $typeID): array
+{
+    $sql = "SELECT *
+            FROM recipes
+            WHERE type_id = :typeID
+            ORDER BY name ASC;";
+
+    $rs = $conn->prepare($sql);  // RecordsSet
+    $rs->bindValue(':typeID', $typeID, PDO::PARAM_INT);
+    $rs->execute();
+    return $rs->fetchAll(PDO::FETCH_ASSOC);
+}
 function findAll(PDO $conn): array
 {
     $sql = "SELECT *
