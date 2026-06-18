@@ -15,10 +15,12 @@
                     alt="Recipe Image" />
                 <div class="p-4">
                     <h3 class="text-xl font-bold mb-2"><?php echo $recipe['name']; ?></h3>
-                    <div class="flex items-center mb-2">
-                        <span class="text-yellow-500 mr-1"><i class="fas fa-star"></i></span>
-                        <span>4.5</span>
-                    </div>
+                    <?php if (isset($recipe['average_rating'])): ?>
+                        <div class="flex items-center mb-2">
+                            <span class="text-yellow-500 mr-1"><i class="fas fa-star"></i></span>
+                            <span><?php echo number_format($recipe['average_rating'], 1); ?> / 5</span>
+                        </div>
+                    <?php endif; ?>
                     <p class="text-gray-600"><?php echo \Core\Helpers\truncate($recipe['description'], 50); ?></p>
                     <div class="flex items-center mt-4">
                         <span class="text-gray-700 mr-2">Par Marie Durand</span>

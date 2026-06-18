@@ -5,13 +5,17 @@ namespace App\Models\RecipesModel;
 use \PDO;
 
 include_once '../app/models/commentsModel.php';
+include_once '../app/models/ratingsModel.php';
 
 // Helper pour gérer les commentaires partout où besoin
 function attachWithCommentsCount(PDO $conn, array $recipes): array
 {
+    include_once '../app/models/ratingsModel.php';
+
     // On réutilise array_map 
     return array_map(function ($recipe) use ($conn) {
         $recipe['nb_comments'] = \App\Models\CommentsModel\countByRecipeId($conn, $recipe['id']);
+        $recipe['average_rating'] = \App\Models\RatingsModel\getAverageRating($conn, $recipe['id']);
         return $recipe;
     }, $recipes);
 }
@@ -25,6 +29,7 @@ function findOneByRand(PDO $conn): array
     $recipe =  $rs->fetch(PDO::FETCH_ASSOC);
     if ($recipe) {
         $recipe['nb_comments'] = \App\Models\CommentsModel\countByRecipeId($conn, $recipe['id']);
+        $recipe['average_rating'] = \App\Models\RatingsModel\getAverageRating($conn, $recipe['id']);
     }
 
     return $recipe;
@@ -49,12 +54,10 @@ function findOneById(PDO $conn, int $id): array
 function findAllPopulars(PDO $conn): array
 {
 
-    $sql = "SELECT *
-            FROM recipes
-            ORDER BY created_at DESC
-            LIMIT 3;";
+    $sql = "CALL GetPopularRecipes();";
     $rs = $conn->query($sql);
-    $recipes =  $rs->fetchAll(PDO::FETCH_ASSOC);
+    $recipes = $rs->fetchAll(PDO::FETCH_ASSOC);
+    $rs->closeCursor();
     return attachWithCommentsCount($conn, $recipes);
 }
 //Regrouper ces deux fonctions en une seule 

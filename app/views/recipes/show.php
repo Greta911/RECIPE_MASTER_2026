@@ -15,7 +15,7 @@
         <h1 class="text-3xl font-bold mb-4"><?php echo $recipe['name']; ?></h1>
         <div class="flex items-center mb-4">
             <span class="text-yellow-500 mr-1"><i class="fas fa-star"></i></span>
-            <span>4.9</span>
+            <span><?php echo number_format($recipe['average_rating'], 1); ?></span>
             <span class="ml-4 text-gray-700"><i class="fas fa-clock"></i> <?php echo $recipe['prep_time']; ?></span>
         </div>
         <p class="text-gray-700 mb-4">

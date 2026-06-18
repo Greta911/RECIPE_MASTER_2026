@@ -4,11 +4,13 @@ namespace Models\CategoriesModel;
 
 use \PDO;
 
-function findAll(PDO $conn): array
+function findAllWithRecipesCount(PDO $conn): array
 {
-    $sql = "SELECT *
-            FROM types_of_recipes
-            ORDER BY name ASC;";
+    $sql = "SELECT tor.*, COUNT(r.id) AS nb_recipes
+            FROM types_of_recipes tor
+            LEFT JOIN recipes r ON tor.id = r.type_id
+            GROUP BY tor.id
+            ORDER BY tor.name ASC;";
     return $conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 }
 
