@@ -121,3 +121,28 @@ function findAll(PDO $conn): array
     $recipes = $rs->fetchAll(PDO::FETCH_ASSOC);
     return attachWithCommentsCount($conn, $recipes);
 }
+
+//Fonction search pour la searchbar
+function search(PDO $conn, string $searchQuery): array
+{
+    // 1. Nettoyage rapide et découpage en mots
+    $searchCleaned = preg_replace('/\s+/', ' ', trim($searchQuery));
+    if ($searchCleaned === '') return [];
+    $words = explode(' ', $searchCleaned);
+    // 2. Construction ultra-simple des conditions SQL
+    $conditions = [];
+    $params = [];
+    foreach ($words as $i => $word) {
+        $conditions[] = "(name LIKE :w$i OR description LIKE :w$i)";
+        $params[":w$i"] = '%' . $word . '%';
+    }
+    // 3. Préparation et exécution 
+    $sql = "SELECT * 
+            FROM recipes 
+            WHERE " . implode(' OR ', $conditions) .
+        " ORDER BY created_at DESC;";
+    $rs = $conn->prepare($sql);
+    $rs->execute($params);
+    // 4. On récupère et on injecte le nombre de commentaires
+    return attachWithCommentsCount($conn, $rs->fetchAll(PDO::FETCH_ASSOC));
+}

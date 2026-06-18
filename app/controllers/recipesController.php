@@ -10,13 +10,6 @@ function indexAction(PDO $conn)
     include_once '../app/models/recipesModel.php';
     $recipes = RecipesModel\findAll($conn);
 
-    include_once '../app/models/commentsModel.php';
-    // array_map va transformer ton tableau proprement et sans boucle visible
-    $recipes = array_map(function ($recipe) use ($conn) {
-        $recipe['nb_comments'] = \App\Models\CommentsModel\countByRecipeId($conn, $recipe['id']);
-        return $recipe;
-    }, $recipes);
-
     global $content, $title;
     $title = "Liste des recettes";
     ob_start();
@@ -55,5 +48,28 @@ function userRecipesAction(PDO $conn, int $userId)
 
     ob_start();
     include '../app/views/recipes/_index.php';
+    $content = ob_get_clean();
+}
+
+//SEARCHBAR
+
+function searchAction(PDO $conn)
+{
+    // 1. On inclut le modèle des recettes 
+    include_once '../app/models/recipesModel.php';
+
+    // 2. On récupère la chaîne de recherche envoyée par l'URL (ex: ?q=tarte+pomme)
+    $searchQuery = $_GET['q'] ?? '';
+
+    // 3. On appelle notre fonction de recherche du modèle (Elle gère déjà le découpage par mots et le nombre de commentaires)
+    $recipes = \App\Models\RecipesModel\search($conn, $searchQuery);
+
+    // 4. On prépare les variables globales pour le template (layout)
+    global $content, $title;
+    $title = "Résultats de recherche pour : " . $searchQuery;
+
+    // 5. On charge la vue pour afficher les résultats
+    ob_start();
+    include '../app/views/recipes/index.php'; // On réutilise la même vue que la liste globale 
     $content = ob_get_clean();
 }

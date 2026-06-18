@@ -5,6 +5,9 @@ use \App\Controllers\RecipesController;
 include_once '../app/controllers/recipesController.php';
 
 switch ($_GET['recipes']):
+    case 'search':
+        RecipesController\searchAction($conn);
+        break;
     case 'show':
         RecipesController\showAction($conn, $_GET['id']);
         break;

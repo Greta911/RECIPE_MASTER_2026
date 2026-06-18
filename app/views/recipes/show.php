@@ -19,9 +19,7 @@
             <span class="ml-4 text-gray-700"><i class="fas fa-clock"></i> <?php echo $recipe['prep_time']; ?></span>
         </div>
         <p class="text-gray-700 mb-4">
-            Description détaillée de la recette. Cette recette est parfaite
-            pour les occasions spéciales, les dîners en famille ou tout
-            simplement pour se faire plaisir.
+            <?php echo $recipe['description']; ?>
         </p>
         <div class="flex items-center mb-4">
             <span class="text-gray-700 mr-2">Par <?php echo $recipe['user_id']; ?></span>

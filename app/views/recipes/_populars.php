@@ -14,14 +14,7 @@
                     src="<?php echo $recipe['picture']; ?>"
                     alt="Recipe Image" />
                 <div class="p-4">
-                    <div class="flex justify-between items-center mb-2">
-                        <h3 class="text-xl font-bold mb-2"><?php echo $recipe['name']; ?></h3>
-                        <span class="text-sm text-gray-500 flex items-center bg-gray-100 px-2 py-1 rounded-full">
-                            <i class="fas fa-comment mr-1 text-gray-400"></i>
-                            <?php echo $recipe['nb_comments']; ?>
-                        </span>
-                    </div>
-
+                    <h3 class="text-xl font-bold mb-2"><?php echo $recipe['name']; ?></h3>
                     <div class="flex items-center mb-2">
                         <span class="text-yellow-500 mr-1"><i class="fas fa-star"></i></span>
                         <span>4.5</span>
@@ -29,7 +22,7 @@
                     <p class="text-gray-600"><?php echo \Core\Helpers\truncate($recipe['description'], 50); ?></p>
                     <div class="flex items-center mt-4">
                         <span class="text-gray-700 mr-2">Par Marie Durand</span>
-                        <span class="text-gray-500"><i class="fas fa-comment"></i><?php echo $recipe['nb_comments']; ?> commentaires</span>
+                        <span class="text-gray-500"><i class="fas fa-comment"></i> <?php echo $recipe['nb_comments']; ?> <?php echo $recipe['nb_comments'] > 1 ? 'commentaires' : 'commentaire'; ?></span>
                     </div>
                     <a
                         href="?recipes=show&id=<?php echo $recipe['id']; ?>"

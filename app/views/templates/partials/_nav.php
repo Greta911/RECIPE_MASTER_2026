@@ -31,11 +31,21 @@
                         </svg>
                     </button>
                 </div>
+                <!--FORMULAIRE POUR LA SEARCHBAR-->
                 <div class="hidden md:flex items-center space-x-4">
-                    <input
-                        type="text"
-                        placeholder="Rechercher une recette..."
-                        class="p-2 rounded-md" />
+                    <form action="?recipes=search" method="get" class="flex items-center p-2 rounded-md bg-gray-100 mr-2 w-64">
+                        <input type="hidden" name="recipes" value="search" />
+                        <input
+                            type="text"
+                            name="q"
+                            placeholder="Rechercher une recette..."
+                            value="<?php $_GET['q'] ?? ''; ?>"
+                            class="bg-transparent flex-grow focus:outline-none text-gray-700 px-2 text-sm" />
+                        <button type="submit" class="text-gray-500 hover:text-gray-800 px-1">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+
                     <a
                         class="text-white hover:text-yellow-500 px-3 py-2"
                         href="?recipes">Recettes</a>
