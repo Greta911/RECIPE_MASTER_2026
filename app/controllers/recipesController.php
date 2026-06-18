@@ -10,6 +10,13 @@ function indexAction(PDO $conn)
     include_once '../app/models/recipesModel.php';
     $recipes = RecipesModel\findAll($conn);
 
+    include_once '../app/models/commentsModel.php';
+    // array_map va transformer ton tableau proprement et sans boucle visible
+    $recipes = array_map(function ($recipe) use ($conn) {
+        $recipe['nb_comments'] = \App\Models\CommentsModel\countByRecipeId($conn, $recipe['id']);
+        return $recipe;
+    }, $recipes);
+
     global $content, $title;
     $title = "Liste des recettes";
     ob_start();
@@ -21,6 +28,9 @@ function showAction(PDO $conn, int $id)
 {
     include_once '../app/models/recipesModel.php';
     $recipe = RecipesModel\findOneById($conn, $id);
+
+    include_once '../app/models/commentsModel.php';
+    $comments = \App\Models\CommentsModel\findAllByRecipeId($conn, $id);
 
     global $content, $title;
     $title = $recipe['name'];

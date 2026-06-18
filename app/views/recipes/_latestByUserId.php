@@ -17,7 +17,14 @@
                     alt="<?php echo $recipe['name'] ?>"
                     class="w-full h-48 object-cover" />
                 <div class="p-4">
-                    <h5 class="text-lg font-bold mb-2 text-white"><?php echo $recipe['name'] ?></h5>
+                    <div class="flex justify-between items-center mb-2">
+                        <h5 class="text-lg font-bold mb-2 text-white"><?php echo $recipe['name'] ?></h5>
+                        <span class="text-sm text-gray-500 flex items-center bg-gray-100 px-2 py-1 rounded-full">
+                            <i class="fas fa-comment mr-1 text-gray-400"></i>
+                            <?php echo $recipe['nb_comments']; ?>
+                        </span>
+                    </div>
+
                     <div class="flex items-center mb-2">
                         <span class="text-yellow-500 mr-1"><i class="fas fa-star"></i></span>
                         <span>4.5</span>

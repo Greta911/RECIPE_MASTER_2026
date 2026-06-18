@@ -1,6 +1,7 @@
 <?php
 
 /** @var array $randomRecipe */
+
 ?>
 <section class="relative mb-6">
     <img
@@ -21,7 +22,7 @@
         </p>
         <div class="flex items-center mb-4">
             <span class="text-gray-400 mr-2">Par Jean Dupont</span>
-            <span class="text-gray-500"><i class="fas fa-comment"></i> 12 commentaires</span>
+            <span class="text-gray-500"><i class="fas fa-comment"></i> <?php echo $randomRecipe['nb_comments']; ?> commentaire/s</span>
         </div>
         <a
             href="?recipes=show&id=<?php echo $randomRecipe['id']; ?>"

@@ -4,6 +4,17 @@ namespace App\Models\RecipesModel;
 
 use \PDO;
 
+include_once '../app/models/commentsModel.php';
+
+// Helper pour gérer les commentaires partout où besoin
+function attachWithCommentsCount(PDO $conn, array $recipes): array
+{
+    // On réutilise array_map 
+    return array_map(function ($recipe) use ($conn) {
+        $recipe['nb_comments'] = \App\Models\CommentsModel\countByRecipeId($conn, $recipe['id']);
+        return $recipe;
+    }, $recipes);
+}
 function findOneByRand(PDO $conn): array
 {
     $sql = "SELECT *
@@ -11,7 +22,12 @@ function findOneByRand(PDO $conn): array
             ORDER BY RAND()
             LIMIT 1;";
     $rs = $conn->query($sql);
-    return $rs->fetch(PDO::FETCH_ASSOC);
+    $recipe =  $rs->fetch(PDO::FETCH_ASSOC);
+    if ($recipe) {
+        $recipe['nb_comments'] = \App\Models\CommentsModel\countByRecipeId($conn, $recipe['id']);
+    }
+
+    return $recipe;
 }
 
 function findOneById(PDO $conn, int $id): array
@@ -22,7 +38,12 @@ function findOneById(PDO $conn, int $id): array
     $rs = $conn->prepare($sql);
     $rs->bindValue(':id', $id, PDO::PARAM_INT);
     $rs->execute();
-    return $rs->fetch(PDO::FETCH_ASSOC);
+    $recipe =  $rs->fetch(PDO::FETCH_ASSOC);
+    if ($recipe) {
+        $recipe['nb_comments'] = \App\Models\CommentsModel\countByRecipeId($conn, $recipe['id']);
+    }
+
+    return $recipe;
 }
 
 function findAllPopulars(PDO $conn): array
@@ -33,9 +54,10 @@ function findAllPopulars(PDO $conn): array
             ORDER BY created_at DESC
             LIMIT 3;";
     $rs = $conn->query($sql);
-    return $rs->fetchAll(PDO::FETCH_ASSOC);
+    $recipes =  $rs->fetchAll(PDO::FETCH_ASSOC);
+    return attachWithCommentsCount($conn, $recipes);
 }
-
+//Regrouper ces deux fonctions en une seule 
 function findAllByUserId(PDO $conn, int $userID): array
 {
     $sql = "SELECT *
@@ -45,7 +67,8 @@ function findAllByUserId(PDO $conn, int $userID): array
     $rs = $conn->prepare($sql);
     $rs->bindValue(':userID', $userID, PDO::PARAM_INT);
     $rs->execute();
-    return $rs->fetchAll(PDO::FETCH_ASSOC);
+    $recipes = $rs->fetchAll(PDO::FETCH_ASSOC);
+    return attachWithCommentsCount($conn, $recipes);
 }
 
 function findAllByUserIdWithoutLimit(PDO $conn, int $userID): array
@@ -57,8 +80,8 @@ function findAllByUserIdWithoutLimit(PDO $conn, int $userID): array
     $rs = $conn->prepare($sql);
     $rs->bindValue(':userID', $userID, PDO::PARAM_INT);
     $rs->execute();
-
-    return $rs->fetchAll(PDO::FETCH_ASSOC);
+    $recipes = $rs->fetchAll(PDO::FETCH_ASSOC);
+    return attachWithCommentsCount($conn, $recipes);
 }
 
 function findAllByTypeId(PDO $conn, int $typeID): array
@@ -71,7 +94,8 @@ function findAllByTypeId(PDO $conn, int $typeID): array
     $rs = $conn->prepare($sql);  // RecordsSet
     $rs->bindValue(':typeID', $typeID, PDO::PARAM_INT);
     $rs->execute();
-    return $rs->fetchAll(PDO::FETCH_ASSOC);
+    $recipes = $rs->fetchAll(PDO::FETCH_ASSOC);
+    return attachWithCommentsCount($conn, $recipes);
 }
 
 function findAllByIngredientId(PDO $conn, int $ingredientID): array
@@ -85,7 +109,8 @@ function findAllByIngredientId(PDO $conn, int $ingredientID): array
     $rs = $conn->prepare($sql);  // RecordsSet
     $rs->bindValue(':ingredientID', $ingredientID, PDO::PARAM_INT);
     $rs->execute();
-    return $rs->fetchAll(PDO::FETCH_ASSOC);
+    $recipes = $rs->fetchAll(PDO::FETCH_ASSOC);
+    return attachWithCommentsCount($conn, $recipes);
 }
 function findAll(PDO $conn): array
 {
@@ -93,5 +118,6 @@ function findAll(PDO $conn): array
             FROM recipes
             ORDER BY created_at ASC;";
     $rs = $conn->query($sql);
-    return $rs->fetchAll(PDO::FETCH_ASSOC);
+    $recipes = $rs->fetchAll(PDO::FETCH_ASSOC);
+    return attachWithCommentsCount($conn, $recipes);
 }
