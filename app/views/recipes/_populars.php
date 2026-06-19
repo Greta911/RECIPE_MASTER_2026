@@ -18,7 +18,7 @@
                     <?php if (isset($recipe['average_rating'])): ?>
                         <div class="flex items-center mb-2">
                             <span class="text-yellow-500 mr-1"><i class="fas fa-star"></i></span>
-                            <span><?php echo number_format($recipe['average_rating'], 1); ?> / 5</span>
+                            <span><?php echo number_format($recipe['average_rating'] ?? 0, 1); ?> </span>
                         </div>
                     <?php endif; ?>
                     <p class="text-gray-600"><?php echo \Core\Helpers\truncate($recipe['description'], 50); ?></p>

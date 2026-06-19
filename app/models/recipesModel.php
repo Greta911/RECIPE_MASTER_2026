@@ -115,12 +115,25 @@ function findAllByIngredientId(PDO $conn, int $ingredientID): array
     $recipes = $rs->fetchAll(PDO::FETCH_ASSOC);
     return attachWithCommentsCount($conn, $recipes);
 }
-function findAll(PDO $conn): array
+function findAll(PDO $conn, ?int $limit = null, ?int $offset = null): array
 {
-    $sql = "SELECT *
-            FROM recipes
-            ORDER BY created_at ASC;";
-    $rs = $conn->query($sql);
+    if ($limit === null || $offset === null) {
+        $sql = "SELECT *
+                FROM recipes
+                ORDER BY created_at ASC;";
+        $rs = $conn->query($sql);
+    } else {
+        $sql = "SELECT * 
+                FROM recipes 
+                ORDER BY created_at ASC 
+                LIMIT :limit 
+                OFFSET :offset;";
+        $rs = $conn->prepare($sql);
+        $rs->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $rs->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $rs->execute();
+    }
+
     $recipes = $rs->fetchAll(PDO::FETCH_ASSOC);
     return attachWithCommentsCount($conn, $recipes);
 }
@@ -148,4 +161,12 @@ function search(PDO $conn, string $searchQuery): array
     $rs->execute($params);
     // 4. On récupère et on injecte le nombre de commentaires
     return attachWithCommentsCount($conn, $rs->fetchAll(PDO::FETCH_ASSOC));
+}
+
+function countAll(PDO $conn): int
+{
+    $sql = "SELECT COUNT(*) AS total FROM recipes;";
+    $rs = $conn->query($sql);
+    $row = $rs->fetch(PDO::FETCH_ASSOC);
+    return $row ? (int)$row['total'] : 0;
 }

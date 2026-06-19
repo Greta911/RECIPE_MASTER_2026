@@ -15,7 +15,7 @@
         </h1>
         <div class="flex items-center mb-4">
             <span class="text-yellow-500 mr-1"><i class="fas fa-star"></i></span>
-            <span class="text-white"><?php echo number_format($randomRecipe['average_rating'], 1); ?></span>
+            <span class="text-white"><?php echo number_format($randomRecipe['average_rating'] ?? 0, 1); ?></span>
         </div>
         <p class="text-gray-300 mb-4">
             <?php echo \Core\Helpers\truncate($randomRecipe['description'], 200); ?>

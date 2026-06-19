@@ -8,7 +8,21 @@ use \App\Models\RecipesModel;
 function indexAction(PDO $conn)
 {
     include_once '../app/models/recipesModel.php';
-    $recipes = RecipesModel\findAll($conn);
+    // 1. On définit combien de recettes on veut par page
+    $limit = 6;
+    // 2. On récupère le numéro de la page depuis l'URL (?page=2). Si la page n'est pas définie ou n'est pas un nombre, on se met sur la page 1 par défaut.
+    $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    if ($currentPage < 1) {
+        $currentPage = 1;
+    }
+    // 3. On calcule l'OFFSET (combien de recettes on doit sauter)
+    $offset = ($currentPage - 1) * $limit;
+    // 4. On récupère UNIQUEMENT les 6 recettes de la page actuelle
+    $recipes = RecipesModel\findAll($conn, $limit, $offset);
+    // 5. Calcul du nombre total de pages
+    $totalRecipes = RecipesModel\countAll($conn);
+    // ceil() permet d'arrondir au nombre supérieur (ex: 13 recettes / 6 = 2.16 -> donc 3 pages)
+    $totalPages = (int)ceil($totalRecipes / $limit);
 
     global $content, $title;
     $title = "Liste des recettes";
